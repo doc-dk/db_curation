@@ -1,7 +1,7 @@
 import os
 import sqlite3
 import pandas as pd
-
+import itertools
 
 folder = 'D:/Shweta/pccm_db'
 file = 'PCCM_BreastCancerDB_2021_02_22.db'
@@ -63,7 +63,6 @@ patient_info_phy_act_stat = "UPDATE patient_information_history SET type_physica
 # old_phy_act = patient_info['type_physical_activity']
 # updated_phy_act = patient_info_tab['type_physical_activity']
 # phy_act = pd.concat([old_phy_act, updated_phy_act], axis=1)
-
 ##
 
 physical_activity_dict = {'walking': ['walk', 'walking', 'walking_for_exercise', 'lawn_walking'],
@@ -84,16 +83,29 @@ splitted_str = replace_and_split_string(phy_act)
 
 physical_activity_dict.keys()
 vals = physical_activity_dict.values()
-
-def split_replace_string(column):
-    cleaned_col = []
-    for val in column:
-        if val.contains(vals):
-                print(val)
-                cleaned_col.append(val)
-    return cleaned_col
+vals_dict = phy_act.to_dict()
 
 
-splitted_output = split_replace_string(patient_info['type_physical_activity'])
+phys_act_vocat = list(itertools.compress(physical_activity_dict.keys(), id_pos))
 
+id_pos = ['walk' in value for value in (physical_activity_dict.values())]
+
+
+for val in physical_activity_dict.values():
+    # print(val)
+        for sub_val in val:
+            # print(sub_val)
+            id_pos = [sub_val in value for value in (physical_activity_dict.values())]
+            print(id_pos)
+            phys_act_vocat = list(itertools.compress(physical_activity_dict.keys(), id_pos))
+            print(phys_act_vocat)
+
+for val in physical_activity_dict.values():
+    print(val)
+        for sub_val in val:
+            print(sub_val)
+            id_pos = [sub_val in value for value in (vals_dict.values())]
+            print(id_pos)
+            phys_act_vocat = list(itertools.compress(physical_activity_dict.keys(), id_pos))
+            print(phys_act_vocat)
 
