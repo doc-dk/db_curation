@@ -92,3 +92,5 @@ def find_max_median_min_length_of_string(file, folder):
             output_df = pd.DataFrame(max_length, columns=['col_name', 'max_length', 'median', 'min_length'])
         output_df.to_excel(writer, sheet_name=tab, index=False)
     writer.save()
+
+
