@@ -1,5 +1,3 @@
-import sqlalchemy
-sqlalchemy.__version__
 from sqlalchemy import create_engine
 from sqlalchemy import MetaData, Table, Column, Integer, String, Boolean, Float
 from sqlalchemy import inspect
