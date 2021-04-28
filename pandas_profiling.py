@@ -35,4 +35,4 @@ def get_pandas_profile_of_each_table(folder, file):
         profile.to_file('D:\\Shweta\\pccm_db\\pp_html_files\\2021_03_30_pandas_profile_report_'+ table_name + '.html')
 
 
-get_pandas_profile_of_each_table(folder, file)
+# get_pandas_profile_of_each_table(folder, file)

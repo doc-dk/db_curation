@@ -113,7 +113,6 @@ def repalce_values_by_dict_keys(physical_activity_dict, dict_values):
             if len(vocab_type) != 0:
                 changed_phy_act.append(vocab_type)
             else:
-                # TODO assign to existing key or create new key and change dict
                 split_val = val.split()
                 lst = []
                 for value in split_val:
@@ -142,136 +141,21 @@ changed_phy_acts_lst, lst = repalce_values_by_dict_keys(physical_activity_dict, 
 changed_phy_acts_sr = pd.Series(changed_phy_acts_lst)
 phy_act_df = pd.concat([patient_info['type_physical_activity'], changed_phy_acts_sr], axis=1)
 
-# phy_act_df.to_excel('D:\Shweta\pccm_db\output_df\\2021_03_26_physical_activities_sk.xlsx', index=False)
+## diet
 
-# cleaned_lst = []
-# for lst in changed_phy_acts_lst:
-#     print(len(lst))
-#     print(lst)
-#     while ('' in lst):
-#         lst_clean = lst.remove('')
-#         print(lst_clean)
-#         cleaned_lst.append(lst_clean)
+diet_dict = {'vegetarian': 'vegetarian',
+             'vegan': 'vegan',
+             'non_vegetarian': ['non-vegetarian', 'non vegetarian', 'non_vegetarian'],
+             'ovo_vegetarian': ['ovo-vegetarian', 'ovo vegetarian', 'ovo_vegetarian'],
+             'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
+             'data_not_available': ['data not available', 'data_not_available', 'data not in report']
+             }
 
+patient_diet = patient_info['diet'].str.lower()
+patient_diet_dict = patient_diet.to_dict()
 
-# phy_act_lst = list(patient_info['type_physical_activity'])
-# patient_info['type_physical_activity'] = patient_info['type_physical_activity'].replace(phy_act_lst, changed_phy_acts_lst)
-dat = ['Walking; Yoga', 'Yoga; Kathak Dance', 'Walking; Jogging; Bicycling; Lap. Swimming; Aerobic Exercise; Yoga; Lawn Mowing']
-strings = 'Walking; Jogging; Bicycling; Lap. Swimming; Aerobic Exercise; Yoga; Lawn Mowing'
+changed_diet, lst = repalce_values_by_dict_keys(diet_dict, patient_diet_dict)
 
-from nltk import everygrams
-
-msg_split = strings.split()
-
-split_cleaned_lst = []
-for value in msg_split:
-    split = re.sub('[^a-zA-Z]', '', value)
-    split_cleaned = split.lower()
-    split_cleaned_lst.append(split_cleaned)
-    print(split_cleaned)
-
-list(everygrams(split_cleaned_lst))
-
-# for string in strings:
-#     splitted_str = string.split()
-#     splitted_strings.append(splitted_str)
-#     print(splitted_str)
-
-# dat = 'Walking; Jogging; Bicycling; Lap. Swimming; Aerobic Exercise; Yoga; Lawn Mowing'
-# splitted_strings  = dat.split()
-
-# lst = []
-# for value in splitted_strings:
-#     #print(value)
-#     cleaned_value = re.sub('[^a-zA-Z]', '', value)
-#     cleaned_value = cleaned_value.lower()
-#     #print(cleaned_value)
-#     key_reqd = get_value_from_key(physical_activity_dict, cleaned_value)
-#     print(key_reqd)
-#     if key_reqd is not None:
-#         key_reqd_str = ''.join(key_reqd)
-#         #print(key_reqd_str)
-#         lst.append(key_reqd_str)
-#         while ('' in lst):
-#             lst.remove('')
-#             print(lst)
-#     else:
-#         lst.append(key_reqd)
-#
-# while ('' in lst):
-#     lst.remove('')
-#     print(cleaned_lst)
-#         print(key_reqd_str)
-
-# word = 'walk; jogging; running;bicycling; tennis'
-# patterns = ['walk', 'walking', 'jogging', 'running', 'bicycling', 'tennis']
-#
-# for item in patterns:
-#     if item in word:
-#         print(item)
-#
-# match = (set(word)).intersection(set(patterns))
-#
-# from difflib import get_close_matches, SequenceMatcher
-#
-#
-# get_close_matches(word, patterns)
-# seqmat = SequenceMatcher(word, patterns)
-
-# splitted_str = replace_and_split_string(changed_phy_act)
-
-
-# changed_phy_act = []
-# for val in vals_dict.values():
-#     print(val)
-#     if val is not None:
-#         id_pos = [val in value for value in (physical_activity_dict.values())]
-#         print(id_pos)
-#         phys_act_vocat = list(itertools.compress(physical_activity_dict.keys(), id_pos))
-#         print(phys_act_vocat)
-#         if len(phys_act_vocat) != 0:
-#             changed_phy_act.append(phys_act_vocat)
-#         else:
-#             changed_phy_act.append(val)
-
-
-# id_pos = ['walk' in value for value in (physical_activity_dict.values())]
-# phys_act_vocat = list(itertools.compress(physical_activity_dict.keys(), id_pos))
-
-
-
-# for val in physical_activity_dict.values():
-#     # print(val)
-#         for sub_val in val:
-#             # print(sub_val)
-#             id_pos = [sub_val in value for value in (physical_activity_dict.values())]
-#             print(id_pos)
-#             phys_act_vocat = list(itertools.compress(physical_activity_dict.keys(), id_pos))
-#             print(phys_act_vocat)
-
-# for val in physical_activity_dict.values():
-#     print(val)
-#         for sub_val in val:
-#             print(sub_val)
-#             id_pos = [sub_val in value for value in (vals_dict.values())]
-#             print(id_pos)
-#             phys_act_vocat = list(itertools.compress(physical_activity_dict.keys(), id_pos))
-#             print(phys_act_vocat)
-
-
-# def repalce_values_by_dict_keys(physical_activity_dict, dict_values):
-#     changed_phy_act = []
-#     for val in dict_values.values():
-#         # print(val)
-#         if val is not None:
-#             # print(val)
-#             vocab_type = get_value_from_key(physical_activity_dict, val)
-#             # print(vocab_type)
-#             if len(vocab_type) != 0:
-#                 changed_phy_act.append(vocab_type)
-#             else:
-#                 # TODO assign to existing key or create new key and change dict
-#                 changed_phy_act.append(val)
-#         else:
-#             changed_phy_act.append('data_not_available')
-#     return changed_phy_act
+changed_diet_sr = pd.Series(changed_diet)
+df = pd.concat([patient_info['diet'], changed_diet_sr], axis=1)
+df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\diet_tab_comparison.xlsx')
