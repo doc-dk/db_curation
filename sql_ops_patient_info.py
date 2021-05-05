@@ -105,11 +105,11 @@ def get_value_from_key(vocab_dict, value):
 def repalce_values_by_dict_keys(physical_activity_dict, dict_values):
     changed_phy_act = []
     for val in dict_values.values():
-        # print(val)
+        print(val)
         if val is not None:
-            # print(val)
+            print(val)
             vocab_type = get_value_from_key(physical_activity_dict, val)
-            # print(vocab_type)
+            print(vocab_type)
             if len(vocab_type) != 0:
                 changed_phy_act.append(vocab_type)
             else:
@@ -119,17 +119,17 @@ def repalce_values_by_dict_keys(physical_activity_dict, dict_values):
                     cleaned_value = re.sub('[^a-zA-Z]', '', value)
                     cleaned_value = cleaned_value.lower()
                     key_reqd = get_value_from_key(physical_activity_dict, cleaned_value)
-                    # print(key_reqd)
+                    print(key_reqd)
                     if key_reqd is not None:
                         key_reqd_str = ';'.join(key_reqd)
                         lst.append(key_reqd_str)
-                        # print(lst)
+                        print(lst)
                         while ('' in lst):
                             lst.remove('')
                             #changed_phy_act.append(lst)
                     else:
                         lst.append(key_reqd)
-                       #print(key_reqd_str)
+                       print(key_reqd_str)
                 print(lst)
                 changed_phy_act.append(lst)
         else:
@@ -159,3 +159,114 @@ changed_diet, lst = repalce_values_by_dict_keys(diet_dict, patient_diet_dict)
 changed_diet_sr = pd.Series(changed_diet)
 df = pd.concat([patient_info['diet'], changed_diet_sr], axis=1)
 df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\diet_tab_comparison.xlsx')
+
+menopause_status_dict = {'pre_menopausal': ['pre-menopausal', 'premenopausal'],
+                         'post_menopausal': ['post-menopausal', 'post-menopause', 'post menopausal'],
+                         'peri_menopausal': 'peri-menopausal',
+                         'hysterectomy': ['hysterectomy', 'hysterctomy', 'post hysterectomy', 'hysterectome',
+                                         'post -menopausal(hysterectomy done in 2012)'],
+                        'oopherectomy': ['oophorectomy', 'bilateral oopherectomy'],
+                        'other': 'male',
+                        'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
+                        'data_not_available': ['data not available', 'data_not_available', 'data not in report']
+                         }
+
+patient_menopause_status = patient_info['menopause_status'].str.lower()
+patient_menopause_status_dict = patient_menopause_status.to_dict()
+
+changed_menopause_status, lst = repalce_values_by_dict_keys(menopause_status_dict, patient_menopause_status_dict)
+
+changed_menopause_status_sr = pd.Series(changed_menopause_status)
+df = pd.concat([patient_info['menopause_status'], changed_menopause_status_sr], axis=1)
+df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\menopause_status_comparison.xlsx')
+
+## age_at_menopause_yrs
+
+age_at_menopause_yrs_dict = {'NA': ['pre-menopausal', 'peri-menopausal', 'hysterectomy', 'bilateral oopherectomy',
+                                    'male', 'hysterectome', '54 (Hysterectomy done)', '44 (Hysterectomy done in 2012)'],
+                            'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
+                            'data_not_available': ['data not available', 'data_not_available', 'data not in report']
+                            }
+
+def repalce_values_by_dict_keys_for_numeric_type(variable_defined_dict, dict_values):
+    changed_phy_act = []
+    for val in dict_values.values():
+        print(val)
+        if val is not None:
+            if val.isdigit():
+                changed_phy_act.append(val)
+            else:
+                vocab_type = get_value_from_key(variable_defined_dict, val)
+                print(vocab_type)
+                if len(vocab_type) != 0:
+                    changed_phy_act.append(vocab_type)
+                else:
+                    split_val = val.split()
+                    lst = []
+                    for value in split_val:
+                        cleaned_value = re.sub('[^a-zA-Z]', '', value)
+                        cleaned_value = cleaned_value.lower()
+                        key_reqd = get_value_from_key(variable_defined_dict, cleaned_value)
+                        print(key_reqd)
+                        if key_reqd is not None:
+                            key_reqd_str = ';'.join(key_reqd)
+                            lst.append(key_reqd_str)
+                            print(lst)
+                            while ('' in lst):
+                                lst.remove('')
+                                #changed_phy_act.append(lst)
+                        else:
+                            lst.append(key_reqd)
+                            print(key_reqd_str)
+                    print(lst)
+                    changed_phy_act.append(lst)
+    return changed_phy_act, lst
+
+
+patient_age_at_menopause_yrs = patient_info['age_at_menopause_yrs'].str.lower()
+patient_age_at_menopause_yrs_dict = patient_age_at_menopause_yrs.to_dict()
+
+changed_age_at_menopause_yrs, lst = repalce_values_by_dict_keys_for_numeric_type(age_at_menopause_yrs_dict, patient_age_at_menopause_yrs_dict)
+
+changed_age_at_menopause_yrs_sr = pd.Series(changed_age_at_menopause_yrs)
+df = pd.concat([patient_info['age_at_menopause_yrs'], changed_age_at_menopause_yrs_sr], axis=1)
+df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\age_at_menopause_yrs_comparison.xlsx')
+
+## current_breast_cancer_detected_by
+
+current_breast_cancer_detected_by_dict = {'self': 'self',
+                                          'physician': 'physician',
+                                          'routine_checkup': 'Annual body check up',
+                                          'screening_camp': ['Screening Camp ID NA', 'Screening Camp ID 1',
+                                                             'Screening Camp ID Data not in Report',
+                                                             'Screening Camp ID Requires Follow-up'],
+                                          'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                                 'requires follow up'],
+                                          'data_not_available': ['data not available', 'data_not_available',
+                                                                 'data not in report']
+                                          }
+## rb_symptoms
+
+rb_lb_symptoms_dict = {'lumps':['lumps','lump'],
+                    'nipple_retraction':'nipple retraction',
+                    'nipple_discharge': 'nipple discharge',
+                    'pain_or_tenderness': 'pain or tenderness',
+                    'dimpling':'dimpling',
+                    'discolouration':['discolouration','redness'],
+                    'ulceration':'ulceration',
+                     'eczema':'eczema',
+                    'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
+                    'data_not_available': ['data not available', 'data_not_available', 'data not in report']
+                    }
+
+## patient_metastasis_symptoms
+
+patient_metastasis_symptoms_dict = {'weight_loss': 'weight loss',
+                                    'cough': 'cough',
+                                    'bone_pain': 'bone pain',
+                                    'headache':'headache',
+                                    'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                           'requires follow up'],
+                                    'data_not_available': ['data not available', 'data_not_available',
+                                                           'data not in report']
+                                    }
