@@ -62,37 +62,6 @@ cursor.execute(patient_info_gender_stat)
 # phy_act = pd.concat([old_phy_act, updated_phy_act], axis=1)
 ##
 
-physical_activity_dict = {'walking': ['walk', 'walking', 'walking_for_exercise', 'lawn walking', 'lawn moving', 'lawn mowing', 'lawn',
-                                      'walking for exercise'],
-                             'cycling': ['cycle', 'cycling', 'bicycling'],
-                             'running': ['run', 'running'],
-                             'swimming': ['swim', 'swimming', 'lap swimming', 'seasonal swimming'],
-                             'jogging': ['jogging', 'jogg'],
-                             'gym': ['gym', 'gymming'],
-                             'dancing': ['dance', 'dancing', 'kathak', 'zumba'],
-                             'exercise': ['exercise'],
-                             'lower_intensity_exercise': ['lower intensity exercise'],
-                             'aerobic_exercise': ['aerobic exercise', 'other aerobic exercise'],
-                             'yoga': 'yoga',
-                             'playing': ['badminton', 'tennis', 'throw ball', 'ball'],
-                             'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
-                             'no_physical_activities': ['no_physical_activities', 'no physical activities'],
-                             'data_not_available': ['data not available', 'data_not_available']
-                             }
-
-
-# def replace_and_split_string(column):
-#     splitted_strings = []
-#     for val in column:
-#         if val is not None:
-#             value = val.replace('and', ';')
-#             value1 = value.replace('.', ';')
-#             value2 = value1.replace(':', ';')
-#             split_str = value2.split(';')
-#             splitted_strings.append(split_str)
-#     return splitted_strings
-
-
 # phy_act = patient_info['type_physical_activity'].str.lower()
 # vals_dict = phy_act.to_dict()
 
@@ -180,70 +149,18 @@ def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
 #     df[variable_name] = df[variable_name].replace("[]",'')
 #     return df, changed_values, lst
 
-df, changed_phy_acts_lst, lst = replace_values_by_dict_keys(physical_activity_dict, patient_info, 'type_physical_activity')
-
-changed_phy_acts_sr = pd.Series(changed_phy_acts_lst)
-phy_act_df = pd.concat([patient_info['type_physical_activity'], changed_phy_acts_sr], axis=1)
-
-## diet
-
-diet_dict = {'vegetarian': 'vegetarian',
-             'vegan': 'vegan',
-             'non_vegetarian': ['non-vegetarian', 'non vegetarian', 'non_vegetarian'],
-             'ovo_vegetarian': ['ovo-vegetarian', 'ovo vegetarian', 'ovo_vegetarian'],
-             'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
-             'data_not_available': ['data not available', 'data_not_available', 'data not in report']
-             }
-
-patient_diet = patient_info['diet'].str.lower()
-patient_diet_dict = patient_diet.to_dict()
-
-changed_diet, lst = repalce_values_by_dict_keys(diet_dict, patient_diet_dict)
-
-changed_diet_sr = pd.Series(changed_diet)
-df = pd.concat([patient_info['diet'], changed_diet_sr], axis=1)
-df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\diet_tab_comparison.xlsx')
-
-menopause_status_dict = {'pre_menopausal': ['pre-menopausal', 'premenopausal'],
-                         'post_menopausal': ['post-menopausal', 'post-menopause', 'post menopausal'],
-                         'peri_menopausal': 'peri-menopausal',
-                         'hysterectomy': ['hysterectomy', 'hysterctomy', 'post hysterectomy', 'hysterectome',
-                                         'post -menopausal(hysterectomy done in 2012)'],
-                        'oopherectomy': ['oophorectomy', 'bilateral oopherectomy'],
-                        'other': 'male',
-                        'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
-                        'data_not_available': ['data not available', 'data_not_available', 'data not in report']
-                         }
-
-patient_menopause_status = patient_info['menopause_status'].str.lower()
-patient_menopause_status_dict = patient_menopause_status.to_dict()
-
-changed_menopause_status, lst = repalce_values_by_dict_keys(menopause_status_dict, patient_menopause_status_dict)
-
-changed_menopause_status_sr = pd.Series(changed_menopause_status)
-df = pd.concat([patient_info['menopause_status'], changed_menopause_status_sr], axis=1)
-df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\menopause_status_comparison.xlsx')
-
-## age_at_menopause_yrs
-
-age_at_menopause_yrs_dict = {'NA': ['pre-menopausal', 'peri-menopausal', 'hysterectomy', 'bilateral oopherectomy',
-                                    'male', 'hysterectome', '54 (Hysterectomy done)', '44 (Hysterectomy done in 2012)'],
-                            'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
-                            'data_not_available': ['data not available', 'data_not_available', 'data not in report']
-                            }
-
 def repalce_values_by_dict_keys_for_numeric_type(variable_defined_dict, dict_values):
-    changed_phy_act = []
+    changed_values = []
     for val in dict_values.values():
         print(val)
         if val is not None:
             if val.isdigit():
-                changed_phy_act.append(val)
+                changed_values.append(val)
             else:
                 vocab_type = get_value_from_key(variable_defined_dict, val)
                 print(vocab_type)
                 if len(vocab_type) != 0:
-                    changed_phy_act.append(vocab_type)
+                    changed_values.append(vocab_type)
                 else:
                     split_val = val.split()
                     lst = []
@@ -263,8 +180,8 @@ def repalce_values_by_dict_keys_for_numeric_type(variable_defined_dict, dict_val
                             lst.append(key_reqd)
                             print(key_reqd_str)
                     print(lst)
-                    changed_phy_act.append(lst)
-    return changed_phy_act, lst
+                    changed_values.append(lst)
+    return changed_values, lst
 
 
 patient_age_at_menopause_yrs = patient_info['age_at_menopause_yrs'].str.lower()
@@ -275,52 +192,3 @@ changed_age_at_menopause_yrs, lst = repalce_values_by_dict_keys_for_numeric_type
 changed_age_at_menopause_yrs_sr = pd.Series(changed_age_at_menopause_yrs)
 df = pd.concat([patient_info['age_at_menopause_yrs'], changed_age_at_menopause_yrs_sr], axis=1)
 df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\age_at_menopause_yrs_comparison.xlsx')
-
-## current_breast_cancer_detected_by
-
-current_breast_cancer_detected_by_dict = {'self': 'self',
-                                          'physician': 'physician',
-                                          'routine_checkup': 'Annual body check up',
-                                          'screening_camp': ['Screening Camp ID NA', 'Screening Camp ID 1',
-                                                             'Screening Camp ID Data not in Report',
-                                                             'Screening Camp ID Requires Follow-up'],
-                                          'requires_follow_up': ['requires_follow_up', 'requires follow-up',
-                                                                 'requires follow up'],
-                                          'data_not_available': ['data not available', 'data_not_available',
-                                                                 'data not in report']
-                                          }
-## rb_symptoms
-
-rb_lb_symptoms_dict = {'lumps':['lumps','lump'],
-                    'nipple_retraction':'nipple retraction',
-                    'nipple_discharge': 'nipple discharge',
-                    'pain_or_tenderness': 'pain or tenderness',
-                    'dimpling':'dimpling',
-                    'discolouration':['discolouration','redness'],
-                    'ulceration':'ulceration',
-                     'eczema':'eczema',
-                    'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
-                    'data_not_available': ['data not available', 'data_not_available', 'data not in report']
-                    }
-
-## patient_metastasis_symptoms
-
-patient_metastasis_symptoms_dict = {'weight_loss': 'weight loss',
-                                    'cough': 'cough',
-                                    'bone_pain': 'bone pain',
-                                    'headache':'headache',
-                                    'requires_follow_up': ['requires_follow_up', 'requires follow-up',
-                                                           'requires follow up'],
-                                    'data_not_available': ['data not available', 'data_not_available',
-                                                           'data not in report']
-                                    }
-
-
-## columns to change
-
-# cols_to_change_lst = ['type_physical_activity', 'diet', 'menopause_status', 'age_at_menopause_yrs',
-#                       'current_breast_cancer_detected_by', 'rb_symptoms', 'lb_symptoms',
-#                       'patient_metastasis_symptoms']
-
-import patient_info_variable_dicts as dict
-
