@@ -20,6 +20,7 @@ patient_info_stat = "UPDATE patient_information_history SET gender = CASE WHEN g
 cursor.execute(patient_info_stat)
 patient_info_tab = pd.read_sql(sql_stat, conn)
 
+
 def get_unique_values(folder, file):
     db_path = os.path.join(folder, file)
     conn = sqlite3.connect(db_path)
@@ -31,7 +32,6 @@ def get_unique_values(folder, file):
     writer = pd.ExcelWriter('D:/Shweta/pccm_db/output_df/2021_03_17_unique_values_of_db.xlsx',
                             engine='xlsxwriter')
     for table_name in table_names[table_idx]:
-        # print(tab)
         tab_stat = 'SELECT * FROM ' + table_name
         get_tab = pd.read_sql(tab_stat, conn)
         # print(get_tab)
