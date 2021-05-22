@@ -5,7 +5,6 @@ import itertools
 import re
 import pccm_db_curation.patient_info_variable_dicts as p_dict
 
-
 folder = 'D:/Shweta/pccm_db'
 file = 'PCCM_BreastCancerDB_2021_02_22.db'
 path_db = os.path.join(folder, file)
@@ -17,7 +16,7 @@ tabs = tables['name']
 patient_info = pd.read_sql('SELECT * FROM patient_information_history', conn)
 
 
-def get_data(folder, file, table_name):
+def get_data(folde r, file, table_name):
     path_db = os.path.join(folder, file)
     conn = sqlite3.connect(path_db)
     sql_stat = 'SELECT * FROM ' + table_name
@@ -26,6 +25,7 @@ def get_data(folder, file, table_name):
     return df
 
 dat = get_data(folder, file, 'patient_information_history')
+dat['age_at_menopause_yrs'].astype(int)
 
 patient_info_gender_stat = "UPDATE patient_information_history SET gender = CASE WHEN gender = 'Female' THEN 'female' WHEN gender = 'Male' THEN 'male' WHEN gender IS NULL THEN 'data_not_available' END"
 cursor.execute(patient_info_gender_stat)
@@ -100,15 +100,38 @@ def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
             vocab_type = get_value_from_key(defined_dict_variable, val)
             print(vocab_type)
             if len(vocab_type) != 0:
-                changed_values.append(vocab_type)
+                changed_values.append(', '.join([str(elem) for elem in vocab_type]))
             else:
                 lst = cleaned_and_get_key_value(defined_dict_variable, val)
-                changed_values.append(lst)
+                changed_values.append(', '.join([str(elem) for elem in lst]))
         else:
             changed_values.append('data_not_available')
     df[variable_name] = changed_values
     df[variable_name] = df[variable_name].replace("[]",'')
     return df, changed_values, lst
+
+
+
+# def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
+#     variable_values = df[variable_name].str.lower()
+#     dict_values = variable_values.to_dict()
+#     changed_values = []
+#     for val in dict_values.values():
+#         print(val)
+#         if val is not None:
+#             print(val)
+#             vocab_type = get_value_from_key(defined_dict_variable, val)
+#             print(vocab_type)
+#             if len(vocab_type) != 0:
+#                 changed_values.append(vocab_type)
+#             else:
+#                 lst = cleaned_and_get_key_value(defined_dict_variable, val)
+#                 changed_values.append(lst)
+#         else:
+#             changed_values.append('data_not_available')
+#     df[variable_name] = changed_values
+#     df[variable_name] = df[variable_name].replace("[]",'')
+#     return df, changed_values, lst
 
 
 # def repalce_values_by_dict_keys(defined_dict_variable, df, variable_name):
@@ -148,6 +171,7 @@ def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
 #     df[variable_name] = changed_values
 #     df[variable_name] = df[variable_name].replace("[]",'')
 #     return df, changed_values, lst
+
 
 def repalce_values_by_dict_keys_for_numeric_type(variable_defined_dict, dict_values):
     changed_values = []
@@ -192,3 +216,48 @@ changed_age_at_menopause_yrs, lst = repalce_values_by_dict_keys_for_numeric_type
 changed_age_at_menopause_yrs_sr = pd.Series(changed_age_at_menopause_yrs)
 df = pd.concat([patient_info['age_at_menopause_yrs'], changed_age_at_menopause_yrs_sr], axis=1)
 df.to_excel('D:\\Shweta\\pccm_db\\diet_table\\age_at_menopause_yrs_comparison.xlsx')
+##
+curation_cols = {'type_physical_activity': 'physical_activity_dict',
+                 'diet': 'diet_dict',
+                 'menopause_status': 'menopause_status_dict',
+                 'age_at_menopause_yrs': 'age_at_menopause_yrs_dict',
+                 'current_breast_cancer_detected_by': 'current_breast_cancer_detected_by_dict',
+                 'lb_symptoms': 'rb_lb_symptoms_dict',
+                 'rb_symptoms': 'rb_lb_symptoms_dict',
+                 'patient_metastasis_symptoms': 'patient_metastasis_symptoms_dict'}
+
+# def get_dict_name(vocab_dict, value):
+#     id_pos = [value in value_list for value_list in (vocab_dict.keys())]
+#     # print(id_pos)
+#     key_reqd = list(itertools.compress(vocab_dict.values(), id_pos))
+#     for dict_name in key_reqd:
+#         return dict_name
+
+for col in curation_cols.keys():
+    # print(col)
+    # defined_dict_name = curation_cols.values()
+    defined_dict_name = get_dict_name(curation_cols, col)
+    print(defined_dict_name)
+    dict = p_dict.column_names_info(col)
+    print(dict)
+
+from pandas import DataFrame
+
+
+def curated_patient_information_history(old_patient_info_tab, curation_cols):
+    curated_patient_info = []
+    old_cols = old_patient_info_tab.columns
+    for col in old_cols:
+        print(col)
+        if col in curation_cols.keys():
+            defined_dict = p_dict.column_names_info(col)
+            changed_values = replace_values_by_dict_keys(defined_dict, old_patient_info_tab, col)
+            print(changed_values)
+            curated_patient_info.append(changed_values)
+        else:
+            curated_patient_info.append(old_patient_info_tab[col])
+    return curated_patient_info
+
+
+curated_patient_info, output_df = curated_patient_information_history(dat, curation_cols)
+curated_patient_info_df = pd.DataFrame(curated_patient_info, columns=dat.columns)
