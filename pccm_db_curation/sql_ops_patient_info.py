@@ -14,9 +14,10 @@ sql_stat = "SELECT * FROM sqlite_master WHERE TYPE = 'table'"
 tables = pd.read_sql(sql_stat, conn)
 tabs = tables['name']
 patient_info = pd.read_sql('SELECT * FROM patient_information_history', conn)
+patient_info_curated = pd.read_sql('SELECT * FROM curated_patient_information_history', conn)
 
 
-def get_data(folde r, file, table_name):
+def get_data(folder, file, table_name):
     path_db = os.path.join(folder, file)
     conn = sqlite3.connect(path_db)
     sql_stat = 'SELECT * FROM ' + table_name
@@ -24,11 +25,14 @@ def get_data(folde r, file, table_name):
     df = pd.read_sql(sql_stat, conn)
     return df
 
+
 dat = get_data(folder, file, 'patient_information_history')
 dat['age_at_menopause_yrs'].astype(int)
 
 patient_info_gender_stat = "UPDATE patient_information_history SET gender = CASE WHEN gender = 'Female' THEN 'female' WHEN gender = 'Male' THEN 'male' WHEN gender IS NULL THEN 'data_not_available' END"
 cursor.execute(patient_info_gender_stat)
+
+
 ##
 
 # splitted_strs = replace_and_split_string(patient_info['type_physical_activity'])
@@ -71,6 +75,7 @@ def get_value_from_key(vocab_dict, value):
     key_reqd = list(itertools.compress(vocab_dict.keys(), id_pos))
     return key_reqd
 
+
 def cleaned_and_get_key_value(defined_dict_variable, val):
     split_val = val.split()
     lst = []
@@ -88,6 +93,7 @@ def cleaned_and_get_key_value(defined_dict_variable, val):
         else:
             lst.append(key_reqd)
     return lst
+
 
 def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
     variable_values = df[variable_name].str.lower()
@@ -107,9 +113,8 @@ def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
         else:
             changed_values.append('data_not_available')
     df[variable_name] = changed_values
-    df[variable_name] = df[variable_name].replace("[]",'')
+    # df[variable_name] = df[variable_name].replace("[]", '')
     return df, changed_values, lst
-
 
 
 # def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
@@ -199,7 +204,7 @@ def repalce_values_by_dict_keys_for_numeric_type(variable_defined_dict, dict_val
                             print(lst)
                             while ('' in lst):
                                 lst.remove('')
-                                #changed_phy_act.append(lst)
+                                # changed_phy_act.append(lst)
                         else:
                             lst.append(key_reqd)
                             print(key_reqd_str)
@@ -211,7 +216,8 @@ def repalce_values_by_dict_keys_for_numeric_type(variable_defined_dict, dict_val
 patient_age_at_menopause_yrs = patient_info['age_at_menopause_yrs'].str.lower()
 patient_age_at_menopause_yrs_dict = patient_age_at_menopause_yrs.to_dict()
 
-changed_age_at_menopause_yrs, lst = repalce_values_by_dict_keys_for_numeric_type(age_at_menopause_yrs_dict, patient_age_at_menopause_yrs_dict)
+changed_age_at_menopause_yrs, lst = repalce_values_by_dict_keys_for_numeric_type(age_at_menopause_yrs_dict,
+                                                                                 patient_age_at_menopause_yrs_dict)
 
 changed_age_at_menopause_yrs_sr = pd.Series(changed_age_at_menopause_yrs)
 df = pd.concat([patient_info['age_at_menopause_yrs'], changed_age_at_menopause_yrs_sr], axis=1)
@@ -260,4 +266,69 @@ def curated_patient_information_history(old_patient_info_tab, curation_cols):
 
 
 curated_patient_info, output_df = curated_patient_information_history(dat, curation_cols)
-curated_patient_info_df = pd.DataFrame(curated_patient_info, columns=dat.columns)
+
+##
+
+col_info = pd.read_excel('D:\\Shweta\\pccm_db\\new_tables_variable_info\\patient_info_variable_map.xlsx')
+colnames = col_info.variable
+datatypes = col_info.datatype
+
+new_table_creation_query = "CREATE TABLE curated_patient_information_history(" \
+                           "file_number NOT NULL PRIMARY KEY)"
+
+drop_table = "DROP TABLE curated_patient_information_history"
+conn.execute(drop_table)
+# table_copy_stat = "SELECT TOP 0 * INTO curated_patient_information_history FROM patient_information_history"
+
+conn.execute(new_table_creation_query)
+curated_patient_info = pd.read_sql('SELECT * FROM curated_patient_information_history', conn)
+
+
+def create_tab_and_add_columns(col_info_folder, col_info_file, db_folder, db_file,
+                               new_table_name='curated_patient_information_history'):
+    col_info_file_path = os.path.join(col_info_folder, col_info_file)
+    path_db = os.path.join(db_folder, db_file)
+    conn = sqlite3.connect(path_db)
+    col_info = pd.read_excel(col_info_file_path)
+    variables = col_info.variable
+
+    new_table_creation_query = "CREATE TABLE" + ' ' + new_table_name + "(file_number NOT NULL PRIMARY KEY)"
+    print(new_table_creation_query)
+    conn.execute(new_table_creation_query)
+
+    for index, variable in enumerate(variables):
+        if variable == 'file_number':
+            continue
+        data_type = col_info.iloc[index][1]
+        option = col_info.iloc[index][2]
+        add_col_stat = "ALTER TABLE curated_patient_information_history ADD COLUMN " + variable + ' ' + data_type + ' ' + option
+        print(add_col_stat)
+        conn.execute(add_col_stat)
+
+
+##
+
+
+variables = col_info.variable
+
+col_info.iloc[109]
+
+col_info.iloc[109][0]
+
+for index, variable in enumerate(variables):
+    # print(index)
+    # print(variable)
+    data_type = col_info.iloc[index][1]
+    option = col_info.iloc[index][2]
+    # print(data_type)
+    # print(option)
+    add_col_stat = "ALTER TABLE curated_patient_information_history ADD COLUMN " + variable + ' ' + data_type + ' '
+    print(add_col_stat)
+
+col_info.columns
+
+add_columns_to_tab(folder='D:\\Shweta\\pccm_db\\new_tables_variable_info\\',
+                   col_info_file='patient_info_variable_map.xlsx',
+                   db_folder='D:/Shweta/pccm_db',
+                   db_file='PCCM_BreastCancerDB_2021_02_22.db',
+                   new_table_name='curated_patient_information_history')
