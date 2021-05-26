@@ -76,6 +76,7 @@ patient_metastasis_symptoms_dict = {'weight_loss': 'weight loss',
                                                            'data not in report']
                                     }
 
+##
 
 def column_names_info(db_column_name):
     patient_info_col_values_dict = 'NA'
@@ -170,4 +171,56 @@ def column_names_info(db_column_name):
                                                            'data not in report']
                                     }
     return patient_info_col_values_dict
+
+## radiology
+
+mammography_breast_dict = {'bilateral': 'bilateral',
+                           'right_breast': ['right breast', 'right'],
+                           'left_breast': ['left breast', 'left'],
+                           # 'mammography_not_done': ['mammography not done for diagnosis'],
+                            'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                        'requires follow up'],
+                            'data_not_available': ['data not available', 'data_not_available',
+                                                        'data not in report']
+                            }
+
+mammography_massshape_dict = {'irregular': 'irregular',
+                              'oval': 'oval',
+                              'round': ['round', 'rouded'],
+                              'spiculated': ['spiculated', 'spiculations'],
+                              'well_defined': ['well defined', 'well-defined'],
+                              'lobulated': 'lobulated',
+                              'ill_defined': ['illdefined', 'ill defined', 'ill defined posterior margin'],
+                              'circumscribed': ['circumscribed', 'partially circumscribed'],
+                              'obscured': ['obscured', 'partially obscured'],
+                              'radiopaque': ['radio opaque', 'radioopaque', 'radiopaque'],
+                              'asymmetric': 'asymmetric',
+                              'abnormal': 'abnormal',
+                              'angular': 'angular',
+                              'posterior': 'posterior',
+                              'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                'requires follow up'],
+                              'data_not_available': ['data not available', 'data_not_available',
+                                                    'data not in report']
+                              }
+
+sonomammo_breast_dict =  {'bilateral': 'bilateral',
+                           'right_breast': ['right breast', 'right'],
+                           'left_breast': ['left breast', 'left'],
+                            'left_axilla': 'left axilla',
+                            'right_axilla': 'right axilla',
+                            'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                        'requires follow up'],
+                            'data_not_available': ['data not available', 'data_not_available',
+                                                        'data not in report']
+                            }
+
+
+radiology_curation_cols = {'mammography_breast': 'mammography_breast_dict',
+                           'mammography_massshape': 'mammography_massshape_dict',
+                           'mammography_massmargin': 'mammography_massshape_dict',
+                            'sonomammo_breast': 'sonomammo_breast_dict',
+                           'sonomammo_mass_shape': 'mammography_massshape_dict',
+                           'sonomammo_mass_margin': 'mammography_massshape_dict',
+                           }
 
