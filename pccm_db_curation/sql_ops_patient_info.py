@@ -19,8 +19,25 @@ patient_info_curated = pd.read_sql('SELECT * FROM curated_patient_information_hi
 # surgery_path_report_data = pd.read_sql('SELECT * FROM surgery_path_report_data', conn)
 # block_data = pd.read_sql('SELECT * FROM block_data', conn)
 radiology = pd.read_sql('SELECT * FROM radiology', conn)
-
-
+pet_reports = pd.read_sql('SELECT * FROM pet_reports', conn)
+# surgery_report = pd.read_sql('SELECT * FROM surgery_report', conn)
+# general_medical_history = pd.read_sql('SELECT * FROM general_medical_history', conn)
+# family_cancer_history = pd.read_sql('SELECT * FROM family_cancer_history', conn)
+# previous_cancer_history = pd.read_sql('SELECT * FROM previous_cancer_history', conn)
+# nutritional_supplements = pd.read_sql('SELECT * FROM nutritional_supplements', conn)
+# physical_activity = pd.read_sql('SELECT * FROM physical_activity', conn)
+# breast_feeding = pd.read_sql('SELECT * FROM breast_feeding', conn)
+# nact_tox_table = pd.read_sql('SELECT * FROM nact_tox_table', conn)
+# nact_drug_table = pd.read_sql('SELECT * FROM nact_drug_table', conn)
+neo_adjuvant_therapy = pd.read_sql('SELECT * FROM neo_adjuvant_therapy', conn)
+# chemo_tox_table = pd.read_sql('SELECT * FROM chemo_tox_table', conn)
+# chemo_drug_table = pd.read_sql('SELECT * FROM chemo_drug_table', conn)
+radiotherapy = pd.read_sql('SELECT * FROM radiotherapy', conn)
+follow_up_data = pd.read_sql('SELECT * FROM follow_up_data', conn)
+hormonetherapy_survival = pd.read_sql('SELECT * FROM hormonetherapy_survival', conn)
+# block_list = pd.read_sql('SELECT * FROM block_list', conn)
+# clinical_exam = pd.read_sql('SELECT * FROM clinical_exam', conn)
+adjuvant_chemotherapy = pd.read_sql('SELECT * FROM adjuvant_chemotherapy', conn)
 
 
 def get_data(folder, file, table_name):
@@ -31,13 +48,19 @@ def get_data(folder, file, table_name):
     df = pd.read_sql(sql_stat, conn)
     return df
 
-
 dat = get_data(folder, file, 'patient_information_history')
+
+sonomammo_mass_dict = {'mass_lesion_detected': 'mass/lesion detected',
+                       'no_mass_detected': 'no mass detected',
+                       'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                              'requires follow up'],
+                       'data_not_available': ['data not available', 'data_not_available',
+                                              'data not in report']
+                       }
 # dat['age_at_menopause_yrs'].astype(int)
 
 patient_info_gender_stat = "UPDATE patient_information_history SET gender = CASE WHEN gender = 'Female' THEN 'female' WHEN gender = 'Male' THEN 'male' WHEN gender IS NULL THEN 'data_not_available' END"
 cursor.execute(patient_info_gender_stat)
-
 
 ##
 
@@ -75,12 +98,41 @@ cursor.execute(patient_info_gender_stat)
 # phy_act = patient_info['type_physical_activity'].str.lower()
 # vals_dict = phy_act.to_dict()
 
+# def get_value_from_key(vocab_dict, value):
+#     key_reqd_lst = []
+#     id_pos = [value in value_list for value_list in (vocab_dict.values())]
+#      # print(id_pos)
+#     key_reqd = list(itertools.compress(vocab_dict.keys(), id_pos))
+#     if len(key_reqd) == 0:
+#         key_reqd_lst.append('data_to_be_curated')
+#     else:
+#         key_reqd_lst.append(key_reqd)
+#     return key_reqd_lst
+
 def get_value_from_key(vocab_dict, value):
     id_pos = [value in value_list for value_list in (vocab_dict.values())]
     # print(id_pos)
     key_reqd = list(itertools.compress(vocab_dict.keys(), id_pos))
     return key_reqd
 
+key = get_value_from_key(sonomammo_mass_dict, 'data not available')
+# def cleaned_and_get_key_value(defined_dict_variable, val):
+#     split_val = val.split()
+#     lst = []
+#     for value in split_val:
+#         cleaned_value = re.sub('[^a-zA-Z]', '', value)
+#         cleaned_value = cleaned_value.lower()
+#         key_reqd = get_value_from_key(defined_dict_variable, cleaned_value)
+#         print(key_reqd)
+#         if key_reqd is not None:
+#             key_reqd_str = '; '.join(key_reqd)
+#             lst.append(key_reqd_str)
+#             print(lst)
+#             while ('' in lst):
+#                 lst.remove('')
+#         else:
+#             lst.append(key_reqd)
+#     return lst
 
 def cleaned_and_get_key_value(defined_dict_variable, val):
     split_val = val.split()
@@ -89,39 +141,74 @@ def cleaned_and_get_key_value(defined_dict_variable, val):
         cleaned_value = re.sub('[^a-zA-Z]', '', value)
         cleaned_value = cleaned_value.lower()
         key_reqd = get_value_from_key(defined_dict_variable, cleaned_value)
-        print(key_reqd)
+        # print(key_reqd)
         if key_reqd is not None:
-            key_reqd_str = ';'.join(key_reqd)
+            key_reqd_str = '; '.join(key_reqd)
             lst.append(key_reqd_str)
-            print(lst)
+            # print(lst)
             while ('' in lst):
                 lst.remove('')
         else:
             lst.append(key_reqd)
     return lst
 
+# def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
+#     variable_values = df[variable_name].str.lower()
+#     dict_values = variable_values.to_dict()
+#     changed_values = []
+#     for val in dict_values.values():
+#         print(val)
+#         if val is not None:
+#             # print(val)
+#             vocab_type = get_value_from_key(defined_dict_variable, val)
+#             print(vocab_type)
+#             if len(vocab_type) != 0:
+#                 changed_values.append(', '.join([str(elem) for elem in vocab_type]))
+#             else:
+#                 lst = cleaned_and_get_key_value(defined_dict_variable, val)
+#                 print(lst)
+#                 changed_values.append(', '.join([str(elem) for elem in lst]))
+#         else:
+#             changed_values.append('data_not_available')
+#     df[variable_name] = changed_values
+#     # df[variable_name] = df[variable_name].replace("[]", '')
+#     return df, changed_values, lst
 
 def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
     variable_values = df[variable_name].str.lower()
     dict_values = variable_values.to_dict()
     changed_values = []
     for val in dict_values.values():
-        print(val)
+        # print(val)
         if val is not None:
-            print(val)
+            # print(val)
             vocab_type = get_value_from_key(defined_dict_variable, val)
             print(vocab_type)
+            print(len(vocab_type))
             if len(vocab_type) != 0:
                 changed_values.append(', '.join([str(elem) for elem in vocab_type]))
             else:
                 lst = cleaned_and_get_key_value(defined_dict_variable, val)
+                # print(lst)
                 changed_values.append(', '.join([str(elem) for elem in lst]))
         else:
             changed_values.append('data_not_available')
     df[variable_name] = changed_values
-    # df[variable_name] = df[variable_name].replace("[]", '')
-    return df, changed_values, lst
+    df.replace(to_replace = '', value = 'data_to_be_curated', inplace = True)
+    return df, changed_values
 
+df, changed_values = replace_values_by_dict_keys(physical_activity_dict, patient_info, 'type_physical_activity')
+# df, changed_values = replace_values_by_dict_keys(sonomammo_mass_dict, dat, 'sonomammo_mass')
+vals_df = pd.DataFrame(changed_values, columns=['values'])
+vals_df.to_excel('D:\\Shweta\\pccm_db\\output_df\\radio_sono_mass_check.xlsx')
+
+#
+# null_dat_1 = dat[dat['sonomammo_mass'] == '']
+null_dat_1 = patient_info[patient_info['type_physical_activity'] == '']
+patient_info.replace(to_replace = '', value = 'data_to_be_curated')
+to_be_curated = patient_info[patient_info['type_physical_activity'] == 'data_to_be_curated']
+
+null_dat = patient_info[patient_info['type_physical_activity'].isnull()]
 
 # def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
 #     variable_values = df[variable_name].str.lower()
@@ -271,7 +358,24 @@ def curated_patient_information_history(old_patient_info_tab, curation_cols):
     return curated_patient_info
 
 curated_patient_info = curated_patient_information_history(dat, curation_cols)
-dat.apply(lambda x: x.astype(str).str.lower())
+
+##
+dat.replace(to_replace='', value='data_to_be_curated', inplace=True)
+
+def get_info_data_to_be_curated(changed_df, curation_cols):
+    file_number = []
+    varible_to_be_curated = []
+    for variable_name in curation_cols.keys():
+        print(variable_name)
+        to_be_curated_rows = changed_df[changed_df[variable_name] == 'data_to_be_curated']
+        file_number.append(to_be_curated_rows[['file_number']])
+        n = len(to_be_curated_rows)
+        print(n)
+        # varible_to_be_curated.append(var_name)
+        # table_info = pd.DataFrame(file_number, varible_to_be_curated, columns=['file_number', 'variable_name'])
+    return file_number
+
+table_info = get_info_data_to_be_curated(dat, curation_cols)
 
 ##
 
@@ -327,6 +431,7 @@ def insert_data_into_curated_p_info(db_folder, db_file, curated_df):
     db_path = os.path.join(db_folder, db_file)
     conn = sqlite3.connect(db_path)
     curated_patient_info = pd.read_sql('SELECT * FROM curated_patient_information_history', conn)
+
 
 
 
