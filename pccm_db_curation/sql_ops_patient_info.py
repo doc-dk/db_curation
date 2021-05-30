@@ -33,12 +33,17 @@ neo_adjuvant_therapy = pd.read_sql('SELECT * FROM neo_adjuvant_therapy', conn)
 # chemo_tox_table = pd.read_sql('SELECT * FROM chemo_tox_table', conn)
 # chemo_drug_table = pd.read_sql('SELECT * FROM chemo_drug_table', conn)
 radiotherapy = pd.read_sql('SELECT * FROM radiotherapy', conn)
+curated_radiotherapy = pd.read_sql('SELECT * FROM curated_radiotherapy', conn)
 follow_up_data = pd.read_sql('SELECT * FROM follow_up_data', conn)
 hormonetherapy_survival = pd.read_sql('SELECT * FROM hormonetherapy_survival', conn)
 # block_list = pd.read_sql('SELECT * FROM block_list', conn)
 # clinical_exam = pd.read_sql('SELECT * FROM clinical_exam', conn)
 adjuvant_chemotherapy = pd.read_sql('SELECT * FROM adjuvant_chemotherapy', conn)
 
+
+drop_table = "DROP TABLE curated_patient_information_history"
+drop_table = "DROP TABLE curated_radiotherapy"
+conn.execute(drop_table)
 
 def get_data(folder, file, table_name):
     path_db = os.path.join(folder, file)
@@ -50,13 +55,13 @@ def get_data(folder, file, table_name):
 
 dat = get_data(folder, file, 'patient_information_history')
 
-sonomammo_mass_dict = {'mass_lesion_detected': 'mass/lesion detected',
-                       'no_mass_detected': 'no mass detected',
-                       'requires_follow_up': ['requires_follow_up', 'requires follow-up',
-                                              'requires follow up'],
-                       'data_not_available': ['data not available', 'data_not_available',
-                                              'data not in report']
-                       }
+# sonomammo_mass_dict = {'mass_lesion_detected': 'mass/lesion detected',
+#                        'no_mass_detected': 'no mass detected',
+#                        'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+#                                               'requires follow up'],
+#                        'data_not_available': ['data not available', 'data_not_available',
+#                                               'data not in report']
+#                        }
 # dat['age_at_menopause_yrs'].astype(int)
 
 patient_info_gender_stat = "UPDATE patient_information_history SET gender = CASE WHEN gender = 'Female' THEN 'female' WHEN gender = 'Male' THEN 'male' WHEN gender IS NULL THEN 'data_not_available' END"
@@ -420,7 +425,7 @@ add_columns_to_tab(folder='D:\\Shweta\\pccm_db\\new_tables_variable_info\\',
 ## inserting data into new table
 
 from sqlalchemy import create_engine
-engine = engine = create_engine('sqlite:///D://Shweta//pccm_db//PCCM_BreastCancerDB_2021_02_22.db')
+engine = create_engine('sqlite:///D://Shweta//pccm_db//PCCM_BreastCancerDB_2021_02_22.db')
 sqlite_connection = engine.connect()
 sqlite_table = "curated_patient_information_history"
 dat.to_sql(sqlite_table, sqlite_connection, if_exists='fail')
