@@ -26,6 +26,15 @@ def column_names_info(db_column_name):
              'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
              'data_not_available': ['data not available', 'data_not_available', 'data not in report']
              }
+
+    elif db_column_name == 'marital_status':
+        col_values_dict = {'married': ['married', 'maried'],
+                           'unmarried': ['unmarried', 'never married', 'single'],
+                           'widow': ['widow', 'divorced'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available', 'data not in report']
+                           }
+
     elif db_column_name == 'menopause_status':
         col_values_dict = {'pre_menopausal': ['pre-menopausal', 'premenopausal'],
                          'post_menopausal': ['post-menopausal', 'post-menopause', 'post menopausal'],
@@ -37,12 +46,21 @@ def column_names_info(db_column_name):
                         'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
                         'data_not_available': ['data not available', 'data_not_available', 'data not in report']
                          }
+
     elif db_column_name == 'age_at_menopause_yrs':
         col_values_dict = {'NA': ['pre-menopausal', 'peri-menopausal', 'hysterectomy', 'bilateral oopherectomy',
                                     'male', 'hysterectome', '54 (Hysterectomy done)', '44 (Hysterectomy done in 2012)'],
                             'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
                             'data_not_available': ['data not available', 'data_not_available', 'data not in report']
                             }
+
+    elif db_column_name == 'success_fertility_treatment':
+        col_values_dict = {'yes': 'pregnancy from treatment',
+                           'no': ['not successful', 'no pregnancy from treatment', 'not succesful'],
+                           'NA': ['na', 'no fertility treatment used'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available', 'data not in report']
+                           }
 
     elif db_column_name == 'current_breast_cancer_detected_by':
         col_values_dict = {'self': 'self',
@@ -90,6 +108,15 @@ def column_names_info(db_column_name):
                                     'data_not_available': ['data not available', 'data_not_available',
                                                            'data not in report']
                                     }
+    elif db_column_name == 'mammography':
+        col_values_dict = {'yes': 'mammography done',
+                           'no': 'mammography not done for diagnosis',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+
     elif db_column_name == 'mammography_breast':
         col_values_dict = {'bilateral': 'bilateral',
                            'right_breast': ['right breast', 'right'],
@@ -145,6 +172,35 @@ def column_names_info(db_column_name):
                                                     'data not in report']
                               }
 
+    elif db_column_name == 'tomography_y_n':
+        col_values_dict = {'yes': 'yes',
+                           'no': 'no',
+                           'NA': ['na', 'mammography not done for diagnosis'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+
+    elif db_column_name == 'automated_breast_volume_scanner_abvs':
+        col_values_dict = {'yes': 'automated breast volume scanner done',
+                           'no': 'automated breast volume scanner not done',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+
+    elif db_column_name == 'sonomammography_status':
+        col_values_dict = {'yes': 'sono-mammography done',
+                           'no': 'sonomammography not done for diagnosis',
+                           'NA': ['na', 'nan'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+
     elif db_column_name == 'sonomammo_breast':
         col_values_dict = {'bilateral': 'bilateral',
                            'right_breast': ['right breast', 'right'],
@@ -157,6 +213,16 @@ def column_names_info(db_column_name):
                             'data_not_available': ['data not available', 'data_not_available',
                                                         'data not in report']
                             }
+
+    elif db_column_name == 'sonomammo_mass':
+        col_values_dict = {'yes': 'mass/lesion detected',
+                           'no': 'no mass detected',
+                           'NA': ['na', 'sonomammography not done for diagnosis'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
 
     elif db_column_name == 'sonomammo_mass_shape':
         col_values_dict = {'irregular': 'irregular',
@@ -201,6 +267,65 @@ def column_names_info(db_column_name):
                                                     'data not in report']
                               }
 
+    elif db_column_name == 'mri_status':
+        col_values_dict = {'yes': 'mri-breast done',
+                           'no': 'mri-breast not done',
+                           'NA': 'na',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+    elif db_column_name == 'mri_breast':
+        col_values_dict = {'left_breast': 'left breast',
+                           'right_breast': 'right breast',
+                           'bilateral': 'bilateral',
+                           'NA': 'mri-breast not done',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+    elif db_column_name == 'background_paranchymal_enhancement_level_mri':
+        col_values_dict = {'mild': 'mild',
+                           'marked': 'marked',
+                           'minimal': 'minimal',
+                           'moderate': 'moderate',
+                           'NA': 'mri-breast not done',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+
+    elif db_column_name == 'background_paranchymal_enhancement_symmetry_mri':
+        col_values_dict = {'symmetric': 'symmetric',
+                           'NA': ['na', 'mri-breast not done'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+
+    elif db_column_name == 'mass_mri':
+        col_values_dict = {'yes': 'mass detected',
+                           'no': 'no mass detected',
+                           'NA': ['na', 'mri-breast not done'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
+    elif db_column_name == 'mass_location_mri':
+        col_values_dict = {'left_breast': 'left breast',
+                           'right_breast': 'right breast',
+                           'bilateral': 'bilateral',
+                           'NA': 'mri-breast not done',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report']
+                           }
     elif db_column_name == 'pet_carcinoma_status':
         col_values_dict = {'pre_operative': 'pre-operative',
                              'post_operative': 'post-operative',
@@ -210,6 +335,49 @@ def column_names_info(db_column_name):
                              'data_not_available': ['data not available', 'data_not_available',
                                                     'data not in report', 'data_not_availabel']
                              }
+    elif db_column_name == 'mass_shape_mri':
+        col_values_dict = {'irregular': 'irregular',
+                              'oval': 'oval',
+                              'round': ['round', 'rouded'],
+                              'spiculated': ['spiculated', 'spiculations'],
+                              'well_defined': ['well defined', 'well-defined'],
+                              'lobulated': 'lobulated',
+                              'ill_defined': ['illdefined', 'ill defined', 'ill defined posterior margin'],
+                              'circumscribed': ['circumscribed', 'partially circumscribed'],
+                              'obscured': ['obscured', 'partially obscured'],
+                              'radiopaque': ['radio opaque', 'radioopaque', 'radiopaque'],
+                              'asymmetric': 'asymmetric',
+                              'abnormal': 'abnormal',
+                              'angular': 'angular',
+                              'posterior': 'posterior',
+                              'NA': ['na', 'mammography not done for diagnosis'],
+                              'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                'requires follow up'],
+                              'data_not_available': ['data not available', 'data_not_available',
+                                                    'data not in report']
+                              }
+    elif db_column_name == 'mass_margin_mri':
+        col_values_dict = {'irregular': 'irregular',
+                              'oval': 'oval',
+                              'round': ['round', 'rouded'],
+                              'spiculated': ['spiculated', 'spiculations'],
+                              'well_defined': ['well defined', 'well-defined'],
+                              'lobulated': 'lobulated',
+                              'ill_defined': ['illdefined', 'ill defined', 'ill defined posterior margin'],
+                              'circumscribed': ['circumscribed', 'partially circumscribed'],
+                              'obscured': ['obscured', 'partially obscured'],
+                              'radiopaque': ['radio opaque', 'radioopaque', 'radiopaque'],
+                              'asymmetric': 'asymmetric',
+                              'abnormal': 'abnormal',
+                              'angular': 'angular',
+                              'posterior': 'posterior',
+                              'NA': ['na', 'mammography not done for diagnosis'],
+                              'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                'requires follow up'],
+                              'data_not_available': ['data not available', 'data_not_available',
+                                                    'data not in report']
+                              }
+
     elif db_column_name == 'pet_cancer_location':
         col_values_dict = {'right_breast': 'right_breast',
                             'left_breast': 'left_breast',
@@ -489,21 +657,36 @@ def curation_cols(table_name):
     if table_name == 'patient_information_history':
         cols_to_be_curated = {'type_physical_activity': 'physical_activity_dict',
                  'diet': 'diet_dict',
+                 'marital_status': 'marital_status_dict',
                  'menopause_status': 'menopause_status_dict',
                  # 'age_at_menopause_yrs': 'age_at_menopause_yrs_dict',
                  'current_breast_cancer_detected_by': 'current_breast_cancer_detected_by_dict',
                  'lb_symptoms': 'rb_lb_symptoms_dict',
                  'rb_symptoms': 'rb_lb_symptoms_dict',
+                 'success_fertility_treatment': 'success_fertility_treatment_dict',
                  'patient_metastasis_symptoms': 'patient_metastasis_symptoms_dict'}
 
     elif table_name == 'radiology':
-        cols_to_be_curated = {'mammography_breast': 'mammography_breast_dict',
-                           'mammography_massshape': 'mammography_massshape_dict',
-                           'mammography_massmargin': 'mammography_massshape_dict',
-                            'sonomammo_breast': 'sonomammo_breast_dict',
-                           'sonomammo_mass_shape': 'mammography_massshape_dict',
-                           'sonomammo_mass_margin': 'mammography_massshape_dict',
-                           }
+        cols_to_be_curated = {'mammography': 'mammography_dict',
+                                'mammography_breast': 'mammography_breast_dict',
+                                'mammography_massshape': 'mammography_massshape_dict',
+                                'mammography_massmargin': 'mammography_massshape_dict',
+                                'tomography_y_n': 'tomography_y_n_dict',
+                                'automated_breast_volume_scanner_abvs': 'automated_breast_volume_scanner_abvs_dict',
+                                'sonomammography_status': 'sonomammography_status_dict',
+                                'sonomammo_breast': 'sonomammo_breast_dict',
+                                'sonomammo_mass': 'sonomammo_mass_dict',
+                                'sonomammo_mass_shape': 'mammography_massshape_dict',
+                                'sonomammo_mass_margin': 'mammography_massshape_dict',
+                                'mri_status': 'mri_status_dict',
+                                'mri_breast': 'mri_breast_dict',
+                                'background_paranchymal_enhancement_level_mri': 'background_paranchymal_enhancement_level_mri_dict',
+                                'background_paranchymal_enhancement_symmetry_mri': 'background_paranchymal_enhancement_symmetry_mri_dict',
+                                'mass_mri': 'mass_mri_dict',
+                                'mass_location_mri': 'mass_location_mri_dict',
+                                'mass_shape_mri': 'mass_shape_mri_dict',
+                                'mass_margin_mri': 'mass_margin_mri_dict'
+                                }
 
     elif table_name == 'pet_reports':
         cols_to_be_curated = {'pet_carcinoma_status': 'pet_carcinoma_status_dict',

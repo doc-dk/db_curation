@@ -113,17 +113,19 @@ def data_to_be_curated(folder, file):
                             engine='xlsxwriter')
 
     for tab in tabs[table_idx]:
-        # print(tab)
         tab_dat = pd.read_sql('SELECT * FROM' + ' ' + tab, conn)
-        # print(tab_dat)
         tab_cols = tab_dat.columns
         # print(tab_cols)
+        curation_dat_tab = []
         for col in tab_cols:
             curation_dat = tab_dat[tab_dat[col] == 'data_to_be_curated']
             if curation_dat.empty:
                 continue
                 # print(curation_dat)
             curation_dat_info = curation_dat[['file_number', col]]
-            print(curation_dat_info)
-        curation_dat_info.to_excel(writer, sheet_name=tab[0:31], index=False)
+            curation_dat_tab.append(curation_dat_info)
+        curation_dat_tab_df = pd.DataFrame(curation_dat_tab)
+        curation_dat_tab_df.to_excel(writer, sheet_name=tab[0:31], index=False)
     writer.save()
+
+data_to_be_curated(folder, file)
