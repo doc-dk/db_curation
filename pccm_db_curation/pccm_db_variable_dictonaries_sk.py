@@ -326,15 +326,7 @@ def column_names_info(db_column_name):
                            'data_not_available': ['data not available', 'data_not_available',
                                                   'data not in report']
                            }
-    elif db_column_name == 'pet_carcinoma_status':
-        col_values_dict = {'pre_operative': 'pre-operative',
-                             'post_operative': 'post-operative',
-                             'NA': ['na', 'pet_report_not_present'],
-                             'requires_follow_up': ['requires_follow_up', 'requires follow-up',
-                                                    'requires follow up'],
-                             'data_not_available': ['data not available', 'data_not_available',
-                                                    'data not in report', 'data_not_availabel']
-                             }
+
     elif db_column_name == 'mass_shape_mri':
         col_values_dict = {'irregular': 'irregular',
                               'oval': 'oval',
@@ -378,6 +370,16 @@ def column_names_info(db_column_name):
                                                     'data not in report']
                               }
 
+    elif db_column_name == 'pet_carcinoma_status':
+        col_values_dict = {'pre_operative': 'pre-operative',
+                             'post_operative': 'post-operative',
+                             'NA': ['na', 'pet_report_not_present'],
+                             'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                    'requires follow up'],
+                             'data_not_available': ['data not available', 'data_not_available',
+                                                    'data not in report', 'data_not_availabel']
+                             }
+
     elif db_column_name == 'pet_cancer_location':
         col_values_dict = {'right_breast': 'right_breast',
                             'left_breast': 'left_breast',
@@ -390,6 +392,34 @@ def column_names_info(db_column_name):
                             'data_not_available': ['data not available', 'data_not_available',
                                                     'data not in report', 'data_not_availabel']
                             }
+
+    elif db_column_name == 'pet_procedure_body_region':
+        col_values_dict = {'skull_to_mid_thigh': ['skull_to_mid_thigh', 'skull to mid thigh'],
+                           'skull_to_upper_thigh': 'Vertex to upper thigh (Skull to upper thigh)',
+                           'abdomen and pelvis': ['abdomen and pelvis', 'scan of abdomen and pelvis', 'whole abdomen and pelvis',
+                                                  'chest abdomen and pelvis', 'ct of abdomen pelvis'],
+                           'ct_thorax': ['thorax', 'ct scan of thorax', 'ct thorax', 'CT Scan Thorax'],
+                           'hrct_thorax': ['hrct of thorax', 'hrct thorax'],
+                           'ct_brain': 'ct brain with and without contrast',
+                           'abdomen': ['abdomen', 'ct scan abdomen', 'abdomen ct (plain and with oral and IV contrast)'],
+                           'pelvis': 'pelvis',
+                           'liver': 'liver',
+                           'ct_scan_of_pulmonary_angiography': ['CT scan of pulmonary Angiography', 'ct mesentric angiography'],
+                           'skeletal_system': 'skeletal system',
+                           'left_breast': ['left breast', 'left_breast'],
+                           'right_breast': ['right_breast', 'right breast'],
+                           'whole_body': ['whole body', 'whole body pet ct scan ', 'Whole body bone scan report',
+                                          'whole body scan'],
+                           'cect_chest': 'cect_chest',
+                           'bone_scan': ['bone scan', 'whole body bone scan'],
+                           'ct_scan_of_chest': ['ct scan of chest', 'c.t of the chest', 'ct chest', 'chest', 'chest ',
+                                                'chest (plain and constrast)', 'ct chest and abdomen (p+c)', 'chest ct scan'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel']
+                            }
+
     elif db_column_name == 'pet_primary_disease_yes_no':
         col_values_dict = {'yes': 'primary_disease',
                                    'no': ['no_primary_disease', 'not_primary_disease'],
@@ -399,6 +429,17 @@ def column_names_info(db_column_name):
                                     'data_not_available': ['data not available', 'data_not_available',
                                                     'data not in report', 'data_not_availabel']
                                    }
+
+    elif db_column_name == 'pet_local_spread':
+        col_values_dict = {'yes': 'local_spread_present',
+                           'no': 'no_local_spread',
+                           'NA': ['na', 'pet_report_not_present'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel']
+                           }
+
     elif db_column_name == 'pet_recurrence_yes_no':
         col_values_dict = {'yes': ['recurrence_present', 'yes_recurrence_present'],
                               'no': ['no_recurrence_present', 'no_recurrence'],
@@ -408,15 +449,17 @@ def column_names_info(db_column_name):
                               'data_not_available': ['data not available', 'data_not_available',
                                                      'data not in report', 'data_not_availabel']
                               }
+
     elif db_column_name == 'pet_distant_metastasis':
-        col_values_dict = {'distant_metastasis': ['metastasis', 'possible_metastasis', 'distant_metastasis_present'],
-                               'no_distant_metastasis': 'no_metastasis',
+        col_values_dict = {'yes': ['metastasis', 'possible_metastasis', 'distant_metastasis_present'],
+                               'no': 'no_metastasis',
                                'NA': ['na', 'pet_report_not_present'],
                                'requires_follow_up': ['requires_follow_up', 'requires follow-up',
                                                         'requires follow up'],
                                'data_not_available': ['data not available', 'data_not_available',
                                                         'data not in report', 'data_not_availabel']
                                }
+
     elif db_column_name == 'nact_status':
         col_values_dict = {'yes': ['yes', 'nact_given', 'NACT given', 'nact_and_naht_given'],
                     'no': ['no', 'nact not given', 'nact/naht not given', 'nact_and_naht_given'],
@@ -427,6 +470,7 @@ def column_names_info(db_column_name):
                                                 'data not in report', 'data_not_availabel'],
                     'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                     }
+
     elif db_column_name == 'place_nact':
         col_values_dict = {'pccm': 'at pccm',
                    'outside': 'outside',
@@ -437,16 +481,45 @@ def column_names_info(db_column_name):
                                                 'data not in report', 'data_not_availabel'],
                    'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                    }
-    elif db_column_name == 'details_nact':
-        col_values_dict = {'details_available': ['details available', 'ac 4 cycles followed by weekly paclitaxel 12 weeks',
-                                            '4 cycles of EC + docetaxel', '4 cycles of ec '],
-                     'NA': ['na', 'nact not given', 'nact/naht not given'],
-                     'requires_follow_up': ['requires_follow_up', 'requires follow-up',
-                                        'requires follow up', 'not certain, requires follow-up', 'follow-up required'],
-                    'data_not_available': ['data not available', 'data_not_available',
-                                                'data not in report', 'data_not_availabel'],
-                    'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
-                   }
+
+    # elif db_column_name == 'details_nact':
+    #     col_values_dict = {'details_available': ['details available', 'ac 4 cycles followed by weekly paclitaxel 12 weeks',
+    #                                         '4 cycles of EC + docetaxel', '4 cycles of ec '],
+    #                  'NA': ['na', 'nact not given', 'nact/naht not given'],
+    #                  'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+    #                                     'requires follow up', 'not certain, requires follow-up', 'follow-up required'],
+    #                 'data_not_available': ['data not available', 'data_not_available',
+    #                                             'data not in report', 'data_not_availabel'],
+    #                 'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+    #                }
+
+    elif db_column_name == 'toxicity_type':
+        col_values_dict = {'no_toxicity': ['no toxicity', 'no'],
+                           'neuropathy': 'neuropathy',
+                           'vomiting': 'vomiting',
+                           'pain_and_increasing_size': 'pain and increasing size',
+                           'neutropenia': ['neutropenia', 'severe neutropenia'],
+                           'nausea': 'nausea',
+                           'joint_pain': 'joint pain',
+                           'cardiotoxicity': 'cardiotoxicity',
+                           'weakness': 'weakness',
+                           'fever': 'fever',
+                           'NA': ['na', 'nact not given', 'nact/naht not given'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
+    elif db_column_name == 'toxicity_grade':
+        col_values_dict = {'mild': 'mild',
+                           'moderate': 'moderate',
+                           'severe': 'severe',
+                           'NA': ['na', 'nact not given', 'nact/naht not given'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
     elif db_column_name == 'toxicity_response':
         col_values_dict = {'complete': 'complete',
                             'partial': 'partial',
@@ -457,6 +530,42 @@ def column_names_info(db_column_name):
                                                 'data not in report', 'data_not_availabel'],
                             'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                           }
+
+    elif db_column_name == 'tumour_response_check_method':
+        col_values_dict = {'sonomammography': ['sonomammography' 'sono mammography'],
+                           'mammography': ['mammography', 'mammography '],
+                           'ultrasound': ['left breast ultrasound', 'usg', 'ultrasound'],
+                           'mri': 'mri',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                        'requires follow up', 'not certain, requires follow-up', 'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                        'data not in report', 'data_not_availabel']
+                           }
+
+    elif db_column_name == 'tumour_response_nact':
+        col_values_dict = {'complete': 'complete',
+                           'partial': 'partial',
+                           'progression': 'progression',
+                           'progressive': 'progressive',
+                           'NA': ['na', 'nact not given', 'nact/naht not given'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel']
+                           }
+
+    elif db_column_name == 'nact_completion_status':
+        col_values_dict = {'complete': ['nact_complete', 'nact completed as per schedule'],
+                           'incomplete': ['incomplete', 'nact incomplete'],
+                           'NA': ['na', 'nact not given', 'nact/naht not given'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel']
+                           }
+
     elif db_column_name == 'trastuzumab_use_nact':
         col_values_dict = {'yes': 'trastuzumab used',
                              'no': ['trastuzumab not used', 'no_neo_adjuvant_trastuzumab'],
@@ -467,6 +576,7 @@ def column_names_info(db_column_name):
                                                 'data not in report', 'data_not_availabel'],
                              'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                              }
+
     elif db_column_name == 'hormone_therapy_nact':
         col_values_dict = {'yes': ['yes', 'naht_given', 'hormone therapy given', 'hormone therapy nact given',
                                      'hormone therapy recieved', 'naht_yes'],
@@ -478,6 +588,7 @@ def column_names_info(db_column_name):
                                                 'data not in report', 'data_not_availabel'],
                              'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                              }
+
     elif db_column_name == 'radiation_received':
         col_values_dict = {'yes': ['radiation therapy recieved', 'radiation therapy recieved'],
                            'requires_follow_up': ['not indicated', 'requires_follow_up', 'requires follow-up',
@@ -496,15 +607,65 @@ def column_names_info(db_column_name):
                                          'data not in report', 'data_not_availabel'],
                   'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                   }
+
     elif db_column_name == 'radiation_ipsilateral_breast':
         col_values_dict = {'right_breast': 'rt_given',
-                                     'NA': ['na', 'not_given'],
-                                     'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                           'left_breast': ['left breast', 'left_breast', 'lt_given'],
+                                'NA': ['na', 'not_given'],
+                                'requires_follow_up': ['requires_follow_up', 'requires follow-up',
                                             'requires follow up', 'not certain, requires follow-up', 'follow-up required'],
-                                     'data_not_available': ['data not available', 'data_not_available',
+                                'data_not_available': ['data not available', 'data_not_available',
                                          'data not in report', 'data_not_availabel'],
-                                     'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                                'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                                      }
+
+    elif db_column_name == 'radiation_chest_wall':
+        col_values_dict = {'right_breast': 'rt_given',
+                           'left_breast': ['left breast', 'left_breast', 'lt_given'],
+                                'NA': ['na', 'not_given'],
+                                'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                            'requires follow up', 'not certain, requires follow-up', 'follow-up required'],
+                                'data_not_available': ['data not available', 'data_not_available',
+                                         'data not in report', 'data_not_availabel'],
+                                'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                                     }
+
+    elif db_column_name == 'radiation_supraclavicular_fossa':
+        col_values_dict = {'right_breast': 'rt_given',
+                           'left_breast': ['left breast', 'left_breast', 'lt_given'],
+                           'NA': ['na', 'not_given'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
+    elif db_column_name == 'radiation_axilla':
+        col_values_dict = {'right_breast': 'rt_given',
+                           'left_breast': ['left breast', 'left_breast', 'lt_given'],
+                           'NA': ['na', 'not_given'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
+    elif db_column_name == 'radiation_ipsilateral_breast_boost':
+        col_values_dict = {'right_breast_boost': 'rt_boost_given',
+                           'left_breast_boost_given': 'lt_boost_given',
+                           'NA': ['na', 'not_given'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
     elif db_column_name == 'radiation_delayed_toxicity':
         col_values_dict = {'yes': 'grade 1 skin reaction',
                                    'no': 'no',
@@ -514,6 +675,31 @@ def column_names_info(db_column_name):
                                          'data not in report', 'data_not_availabel'],
                                     'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                                    }
+    elif db_column_name == 'radiation_location':
+        col_values_dict = {'left_breast': ['left_breast', 'left breast'],
+                           'right_breast': ['right_breast', 'right_breat', 'right whole breast'],
+                           'bilateral_breast': ['b/l breast', 'bilateral', 'bilateral breast'],
+                           'left_scf': ['left scf', 'left_scf'],
+                           'right_scf': ['right scf', 'right_scf'],
+                           'right_axilla': ['right_axilla', 'right axilla'],
+                           'left_axilla': ['left_axilla', 'left axillas'],
+                           'left_breast_chest_wall': ['left breast chest wall', 'left_breast_chest_wall', 'left chest wall'],
+                           'right_breast_chest_wall': ['right breast chest wall', 'right_breast_chest_wall'],
+                           'tumour_bed': ['tumour_bed', 'tumour bed', 'tumour'],
+                           'supraclavicular_area': ['supraclavicular area', 'supraclavicular'],
+                           'right_supraclavicular_region': ['right supraclavicular region', 'right_supraclavicular_region'],
+                           'left_supraclavicular_region': ['left supraclavicular region', 'left_supraclavicular_region'],
+                           'sib': 'sib',
+                           'scf': 'scf',
+                           'electron_boost': 'electron boost',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
     elif db_column_name == 'hormone_indicated':
         col_values_dict = {'yes': 'hormone therapy indicated',
                           'no': 'hormone therapy not indicated',
@@ -524,6 +710,7 @@ def column_names_info(db_column_name):
                                                  'data not in report', 'data_not_availabel'],
                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                           }
+
     elif db_column_name == 'hormone_recieved':
         col_values_dict = {'yes': 'hormone therapy recieved',
                             'no': 'no hormone therapy recieved',
@@ -534,7 +721,8 @@ def column_names_info(db_column_name):
                                 'data not in report', 'data_not_availabel'],
                             'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                             }
-    elif db_column_name == 'hormone_discontinued':
+
+    elif  db_column_name == 'hormone_discontinued':
         col_values_dict = {'yes': ['stopped by patient', 'yes', 'completion of planned course'],
                              'no': ['therapy is ongoing', 'thearpy is ongoing', 'ongoing'],
                              'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires followup',
@@ -544,6 +732,20 @@ def column_names_info(db_column_name):
                                                  'data not in report', 'data_not_availabel'],
                              'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                              }
+
+    elif db_column_name == 'hormone_therapy_outcome':
+        col_values_dict = {'good': 'good',
+                           'therapy_is_ongoing': ['therapy ongoing', 'therapy is ongoing', 'ongoing', 'ongong', 'exemestane- ongoing'],
+                           'complete': 'completed',
+                           'discontinued': ['discontinued', ' stopped by patient'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up', 'requires followup',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
     elif db_column_name == 'hormone_followup':
         col_values_dict = {'therapy_is_ongoing': ['therapy ongoing', 'therapy is ongoing', 'ongoing', 'continued'],
                          'complete': 'completed',
@@ -554,6 +756,7 @@ def column_names_info(db_column_name):
                                          'data not in report', 'data_not_availabel'],
                          'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                          }
+
     elif db_column_name == 'horomone_recurrence':
         col_values_dict = {'yes': 'recurrence',
                            'no': 'no recurrence',
@@ -563,6 +766,7 @@ def column_names_info(db_column_name):
                                          'data not in report', 'data_not_availabel'],
                             'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                            }
+
     elif db_column_name == 'metastasis_exam':
         col_values_dict = {'yes': 'examined for metastatic disease',
                         'no': ['not examined for metastatic disease', 'no examined for metastatic disease'],
@@ -575,7 +779,7 @@ def column_names_info(db_column_name):
     elif db_column_name == 'nature_of_recurrence':
         col_values_dict = {'local': ['local', 'local (right axillary nodal metastasis)'],
                              'distant': 'distant',
-                             'distant_and_local': 'distant and local',
+                             # 'distant_and_local': 'distant and local',
                              'NA': ['na', 'no recurrence'],
                              'requires_follow_up': ['requires_follow_up', 'requires follow-up',
                                             'requires follow up', 'not certain, requires follow-up', 'follow-up required'],
@@ -583,6 +787,44 @@ def column_names_info(db_column_name):
                                          'data not in report', 'data_not_availabel'],
                              'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                              }
+
+    elif db_column_name == 'distant_site':
+        col_values_dict = {'right_breast': ['right_breast', 'right breast', 'right breast '],
+                           'left_breast': ['left_breast', 'left breast'],
+                           'right_axilla': ['right_axilla', 'right axilla'],
+                           'left_axilla': ['left_axilla', 'left axilla'],
+                           'liver': 'liver',
+                           'brain_metastasis': 'brain metastasis',
+                           'left_side_neck': 'left side neck',
+                           'right_side_neck': 'right side neck',
+                           'left_axillary_node': 'left axillary node',
+                           'right_axillary_node': 'right axillary node',
+                           'pancreas': 'pancreas',
+                           'left_chest_wall': 'left chest wall',
+                           'right_chest_wall': 'right chest wall',
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
+    elif db_column_name == 'patient_status_last_followup':
+        col_values_dict = {'survivor': 'survivor',
+                           'deceased:due_to_disease': ['deceased: due to disease', 'deceased, due to disease'],
+                           'deceased:due_to_unrelated_causes': ['deceased: requires specialist input',
+                                                                'deceased', 'deceased: data not in report',
+                                                                'deceased, due to unrelated causes',
+                                                                'deceased: due to unrelated causes'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                           'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
     elif db_column_name == 'chemotherapy_status':
         col_values_dict = {'yes': ['act_given', 'adjuvant chemotherapy given'],
                             'no': 'adjuvant chemotherapy not given',
@@ -603,6 +845,7 @@ def column_names_info(db_column_name):
                                                 'data not in report', 'data_not_availabel'],
                    'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                    }
+
     elif db_column_name == 'details_chemotherapy':
         col_values_dict = {'details_available': ['details available', '6 cycle herceptin',
                                             'ec folowed by paclitaxel + herceptin '],
@@ -614,6 +857,17 @@ def column_names_info(db_column_name):
                     'lost_to_follow_up': [' lost to follow up', 'lost to follow-up']
                    }
 
+    elif db_column_name == 'chemotherapy_completion_status':
+        col_values_dict = {'complete': ['nact_complete', 'nact completed as per schedule'],
+                           'incomplete': ['incomplete', 'nact incomplete'],
+                           'NA': ['na', 'nact not given', 'nact/naht not given'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel']
+                           }
+
     elif db_column_name == 'trastuzumab_use_chemotherapy':
         col_values_dict = {'yes': 'trastuzumab used',
                                 'no': 'trastuzumab not used',
@@ -624,6 +878,7 @@ def column_names_info(db_column_name):
                                                 'data not in report', 'data_not_availabel'],
                                 'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                                 }
+
     elif db_column_name == 'ovary_status':
         col_values_dict = {'pre_menopausal': ['pre-menopausal', 'premenopausal', 'premanopausal', 'menses ongoing',
                                         ' pre-menopausal', 'amenorrhea on chemotherapy;regular menses after chemo'],
@@ -638,6 +893,7 @@ def column_names_info(db_column_name):
                         'data_not_available': ['data not available', 'data_not_available', 'data not in report'],
                         'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                         }
+
     elif db_column_name == 'hormone_therapy_chemotherapy':
         col_values_dict = {'yes': 'hormone therapy given',
                                      'no': 'no hormone therapy given',
@@ -647,6 +903,23 @@ def column_names_info(db_column_name):
                                      'data_not_available': ['data not available', 'data_not_available', 'data not in report'],
                                      'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
                                      }
+
+    elif db_column_name == 'patient_status_last_followup':
+        col_values_dict = {'survivor': 'survivor',
+                           'deceased:due_to_disease': ['deceased: due to disease', 'deceased, due to disease'],
+                           'deceased:due_to_unrelated_causes': ['deceased: requires specialist input', 'deceased',
+                                                                'deceased: data not in report',
+                                                                'deceased, due to unrelated causes',
+                                                                'deceased: due to unrelated causes',
+                                                                'deceased: not known'],
+                           'requires_follow_up': ['requires_follow_up', 'requires follow-up',
+                                                  'requires follow up', 'not certain, requires follow-up',
+                                                  'follow-up required'],
+                           'data_not_available': ['data not available', 'data_not_available',
+                                                  'data not in report', 'data_not_availabel'],
+                            'lost_to_follow_up': [' lost to follow up', 'lost to follow up']
+                           }
+
     return col_values_dict
 
 
@@ -691,39 +964,62 @@ def curation_cols(table_name):
     elif table_name == 'pet_reports':
         cols_to_be_curated = {'pet_carcinoma_status': 'pet_carcinoma_status_dict',
                              'pet_cancer_location': 'pet_cancer_location_dict',
+                             'pet_procedure_body_region': 'pet_procedure_body_region_dict',
                              'pet_primary_disease_yes_no': 'pet_primary_disease_yes_no_dict',
+                             'pet_local_spread': 'pet_local_spread_dict',
                              'pet_recurrence_yes_no': 'pet_recurrence_yes_no_dict',
                              'pet_distant_metastasis': 'pet_distant_metastasis_dict'
                              }
+
     elif table_name == 'neo_adjuvant_therapy':
         cols_to_be_curated = {'nact_status': 'nact_status_dict',
                                       'place_nact': 'place_nact_dict',
-                                      'details_nact': 'details_nact_dict',
+                                      # 'details_nact': 'details_nact_dict',
+                                      'toxicity_type': 'toxicity_type_dict',
+                                      'toxicity_grade': 'toxicity_grade_dict',
                                       'toxicity_response': 'toxicity_response_dict',
+                                      'tumour_response_check_method': 'tumour_response_check_method_dict',
+                                      'tumour_response_nact': 'tumour_response_nact_dict',
+                                      'nact_completion_status': 'nact_completion_status_dict',
                                       'trastuzumab_use_nact': 'trastuzumab_use_nact_dict',
                                       'hormone_therapy_nact': 'hormone_therapy_nact_dict'}
+
     elif table_name == 'radiotherapy':
         cols_to_be_curated = {'radiation_received': 'radiation_received_dict',
                               'imrt_dcrt': 'imrt_dcrt_dict',
                               'radiation_ipsilateral_breast': 'radiation_ipsilateral_breast_dict',
+                              'radiation_chest_wall': 'radiation_chest_wall_dict',
+                              'radiation_supraclavicular_fossa': 'radiation_supraclavicular_fossa_dict',
+                              'radiation_axilla': 'radiation_axilla_dict',
+                              'radiation_ipsilateral_breast_boost': 'radiation_ipsilateral_breast_boost_dict',
                               'radiation_delayed_toxicity': 'radiation_delayed_toxicity_dict'}
 
     elif table_name == 'hormonetherapy_survival':
         cols_to_be_curated = {'hormone_indicated': 'hormone_indicated_dict',
                                          'hormone_recieved': 'hormone_recieved_dict',
                                          'hormone_discontinued': 'hormone_discontinued_dict',
+                                         'hormone_therapy_outcome': 'hormone_therapy_outcome_dict',
                                          'hormone_followup': 'hormone_followup_dict',
                                          'horomone_recurrence': 'hormone_recurrence_dict',
                                          'metastasis_exam': 'metastasis_exam_dict',
                                          'nature_of_recurrence': 'nature_of_recurrence_dict'
                                          }
+
     elif table_name == 'adjuvant_chemotherapy':
         cols_to_be_curated = {'chemotherapy_status': 'adjuvant_chemotherapy_status_dict',
                                        'place_chemotherapy': 'place_chemotherapy_dict',
                                        'details_chemotherapy': 'details_chemotherapy_dict',
+                                       'toxicity_type': 'toxicity_type',
+                                       'toxicity_grade': 'toxicity_grade_dict',
+                                       'toxicity_response': 'toxicity_response_dict',
+                                       'chemotherapy_completion_status': 'chemotherapy_completion_status_dict',
                                        'trastuzumab_use_chemotherapy': 'trastuzumab_use_chemotherapy_dict',
                                        'ovary_status': 'ovary_status_dict',
                                        'hormone_therapy_chemotherapy': 'hormone_therapy_chemotherapy_dict'
                                        }
+
+    elif table_name == 'follow_up_data':
+        cols_to_be_curated = {'follow_up_status': 'follow_up_status_dict'}
+
     return cols_to_be_curated
 

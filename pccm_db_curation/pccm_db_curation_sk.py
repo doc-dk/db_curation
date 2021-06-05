@@ -112,20 +112,58 @@ def data_to_be_curated(folder, file):
     writer = pd.ExcelWriter('D:/Shweta/pccm_db/output_df/2021_05_30_pccm_db_data_to_be_curated_sk.xlsx',
                             engine='xlsxwriter')
 
+    # whole_info = pd.DataFrame()
     for tab in tabs[table_idx]:
         tab_dat = pd.read_sql('SELECT * FROM' + ' ' + tab, conn)
         tab_cols = tab_dat.columns
         # print(tab_cols)
-        curation_dat_tab = []
+        curation_dat_tab = pd.DataFrame()
         for col in tab_cols:
-            curation_dat = tab_dat[tab_dat[col] == 'data_to_be_curated']
+            col_dat = tab_dat[['file_number', col]]
+            # print(col_dat)
+            curation_dat = col_dat[col_dat[col] == 'data_to_be_curated']
+            print(curation_dat)
             if curation_dat.empty:
                 continue
-                # print(curation_dat)
-            curation_dat_info = curation_dat[['file_number', col]]
-            curation_dat_tab.append(curation_dat_info)
-        curation_dat_tab_df = pd.DataFrame(curation_dat_tab)
-        curation_dat_tab_df.to_excel(writer, sheet_name=tab[0:31], index=False)
+            # curation_dat_info = curation_dat[['file_number', col]]
+            # curation_dat_df = pd.DataFrame(curation_dat)
+            tab_info = pd.concat([curation_dat_tab, curation_dat], axis=1, ignore_index=True)
+            # print(curation_dat_tab)
+            # curation_dat_tab.append(curation_dat)
+            # print(curation_dat_tab)
+        # whole_info.append(curation_dat_tab)
+        # whole_info_df = pd.DataFrame(curation_dat_tab)
+        # curation_dat_tab_df = pd.DataFrame(curation_dat_tab)
+        curation_dat_tab.to_excel(writer, sheet_name=tab[0:31], index=False)
     writer.save()
 
 data_to_be_curated(folder, file)
+
+def data_to_be_curated(folder, file):
+    path_db = os.path.join(folder, file)
+    conn = sqlite3.connect(path_db)
+    sql_stat = "SELECT * FROM sqlite_master WHERE TYPE = 'table'"
+    tables = pd.read_sql(sql_stat, conn)
+    tabs = tables['name']
+    table_idx = [25, 26, 27, 28, 29, 30, 31]
+
+    writer = pd.ExcelWriter('D:/Shweta/pccm_db/2021_05_30_pccm_db_data_to_be_curated_sk.xlsx',
+                            engine='xlsxwriter')
+    tab_dat = pd.read_sql('SELECT * FROM curated_patient_information_history', conn)
+    tab_cols = tab_dat.columns
+    curation_dat_tab = []
+    for col in tab_cols:
+        col_dat = tab_dat[['file_number', col]]
+        curation_dat = col_dat[col_dat[col] == 'data_to_be_curated']
+        print(curation_dat)
+        if curation_dat.empty:
+            continue
+        # curation_dat_info = curation_dat[['file_number', col]]
+        curation_dat_tab.append(curation_dat)
+        print(curation_dat_tab)
+    # whole_info.append(curation_dat_tab)
+        whole_info_df = pd.DataFrame(curation_dat_tab)
+    # curation_dat_tab_df = pd.DataFrame(curation_dat_tab)
+        whole_info_df.to_excel(writer, sheet_name=tab[0:31], index=False)
+    writer.save()
+
