@@ -116,11 +116,12 @@ cursor.execute(patient_info_gender_stat)
 
 def get_value_from_key(vocab_dict, value):
     id_pos = [value in value_list for value_list in (vocab_dict.values())]
-    # print(id_pos)
     key_reqd = list(itertools.compress(vocab_dict.keys(), id_pos))
+    if len(key_reqd) == 0:
+        key_reqd = value
     return key_reqd
 
-key = get_value_from_key(sonomammo_mass_dict, 'data not available')
+get_value_from_key(physical_activity_dict, 'walked')
 # def cleaned_and_get_key_value(defined_dict_variable, val):
 #     split_val = val.split()
 #     lst = []
@@ -183,15 +184,23 @@ def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
     variable_values = df[variable_name].str.lower()
     dict_values = variable_values.to_dict()
     changed_values = []
+    data_to_be_curated_df = pd.DataFrame(columns=['variable_name', 'value'])
     for val in dict_values.values():
         # print(val)
         if val is not None:
             # print(val)
             vocab_type = get_value_from_key(defined_dict_variable, val)
-            print(vocab_type)
-            print(len(vocab_type))
+            # print(vocab_type)
             if len(vocab_type) != 0:
                 changed_values.append(', '.join([str(elem) for elem in vocab_type]))
+            # elif len(vocab_type) == 0:
+            #     col_name = variable_name
+            #     print(col_name)
+            #     error_value = val
+            #     print(error_value)
+            #     error_dat = pd.DataFrame(col_name, error_value, columns=['variable_name', 'value'])
+            #     print(error_dat)
+            #     data_to_be_curated_df.append(error_dat, ignore_index=True)
             else:
                 lst = cleaned_and_get_key_value(defined_dict_variable, val)
                 # print(lst)
@@ -199,10 +208,10 @@ def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
         else:
             changed_values.append('data_not_available')
     df[variable_name] = changed_values
-    df.replace(to_replace = '', value = 'data_to_be_curated', inplace = True)
-    return df, changed_values
+    # df.replace(to_replace = '', value = 'data_to_be_curated', inplace = True)
+    return df, changed_values, data_to_be_curated_df
 
-df, changed_values = replace_values_by_dict_keys(physical_activity_dict, patient_info, 'type_physical_activity')
+df, changed_values, data_to_be_curated_df = replace_values_by_dict_keys(physical_activity_dict, dat, 'type_physical_activity')
 # df, changed_values = replace_values_by_dict_keys(sonomammo_mass_dict, dat, 'sonomammo_mass')
 vals_df = pd.DataFrame(changed_values, columns=['values'])
 vals_df.to_excel('D:\\Shweta\\pccm_db\\output_df\\radio_sono_mass_check.xlsx')

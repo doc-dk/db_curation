@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import pandas as pd
+import numpy as np
 import itertools
 import re
 import pccm_db_curation.pccm_db_variable_dictonaries_sk as p_dict
@@ -16,16 +17,13 @@ def get_data(folder, file, table_name):
     df = pd.read_sql(sql_stat, conn)
     return df
 
-dat = get_data(folder, file, 'patient_information_history')
-
 def get_value_from_key(vocab_dict, value):
     id_pos = [value in value_list for value_list in (vocab_dict.values())]
     key_reqd = list(itertools.compress(vocab_dict.keys(), id_pos))
     return key_reqd
 
-
 def cleaned_and_get_key_value(defined_dict_variable, val):
-    split_val = val.split()
+    split_val = re.split(';|:|,| ', val)
     lst = []
     for value in split_val:
         cleaned_value = re.sub('[^a-zA-Z]', '', value)
@@ -58,7 +56,6 @@ def replace_values_by_dict_keys(defined_dict_variable, df, variable_name):
     df.replace(to_replace = '', value = 'data_to_be_curated', inplace = True)
     return df, changed_values
 
-
 def curation_of_table(table_dat, curation_cols):
     old_cols = table_dat.columns
     for col in old_cols:
@@ -66,7 +63,6 @@ def curation_of_table(table_dat, curation_cols):
             defined_dict = p_dict.column_names_info(col)
             replace_values_by_dict_keys(defined_dict, table_dat, col)
     return table_dat
-
 
 def pccm_db_curation(folder, file):
     path_db = os.path.join(folder, file)
@@ -85,61 +81,48 @@ def pccm_db_curation(folder, file):
         sqlite_table = 'curated' + '_' + tab
         curated_table.to_sql(sqlite_table, sqlite_connection, if_exists='fail')
 
-
-# def drop_table(folder, file):
-#     path_db = os.path.join(folder, file)
-#     conn = sqlite3.connect(path_db)
-#     sql_stat = "SELECT * FROM sqlite_master WHERE TYPE = 'table'"
-#     tables = pd.read_sql(sql_stat, conn)
-#     tabs = tables['name']
-#     table_idx = [0, 4, 5, 15, 18, 20, 23]
-#
-#     for tab in tabs[table_idx]:
-#         tab_name = 'curated' + '_' + tab
-#         print(tab_name)
-#         drop_stat = 'DROP TABLE'+ ' ' + tab_name
-#         conn.execute(drop_stat)
-
-
-def data_to_be_curated(folder, file):
+def drop_table(folder, file):
     path_db = os.path.join(folder, file)
     conn = sqlite3.connect(path_db)
     sql_stat = "SELECT * FROM sqlite_master WHERE TYPE = 'table'"
     tables = pd.read_sql(sql_stat, conn)
     tabs = tables['name']
-    table_idx = [25, 26, 27, 28, 29, 30, 31]
+    table_idx = [0, 4, 5, 15, 18, 20, 23]
 
-    writer = pd.ExcelWriter('D:/Shweta/pccm_db/output_df/2021_05_30_pccm_db_data_to_be_curated_sk.xlsx',
-                            engine='xlsxwriter')
-
-    # whole_info = pd.DataFrame()
     for tab in tabs[table_idx]:
-        tab_dat = pd.read_sql('SELECT * FROM' + ' ' + tab, conn)
-        tab_cols = tab_dat.columns
-        # print(tab_cols)
-        curation_dat_tab = pd.DataFrame()
-        for col in tab_cols:
-            col_dat = tab_dat[['file_number', col]]
-            # print(col_dat)
-            curation_dat = col_dat[col_dat[col] == 'data_to_be_curated']
-            print(curation_dat)
-            if curation_dat.empty:
-                continue
-            # curation_dat_info = curation_dat[['file_number', col]]
-            # curation_dat_df = pd.DataFrame(curation_dat)
-            tab_info = pd.concat([curation_dat_tab, curation_dat], axis=1, ignore_index=True)
-            # print(curation_dat_tab)
-            # curation_dat_tab.append(curation_dat)
-            # print(curation_dat_tab)
-        # whole_info.append(curation_dat_tab)
-        # whole_info_df = pd.DataFrame(curation_dat_tab)
-        # curation_dat_tab_df = pd.DataFrame(curation_dat_tab)
-        curation_dat_tab.to_excel(writer, sheet_name=tab[0:31], index=False)
-    writer.save()
+        tab_name = 'curated' + '_' + tab
+        print(tab_name)
+        drop_stat = 'DROP TABLE'+ ' ' + tab_name
+        conn.execute(drop_stat)
 
-data_to_be_curated(folder, file)
+def get_index_of_error_values(df, value='data_to_be_curated'):
+    positions = list()
+    result = df.isin([value])
+    series_obj = result.any()
+    col_names = list(series_obj[series_obj == True].index)
+    print(col_names)
+    for col in col_names:
+        rows = list(result[col][result[col] == True].index)
+        for row in rows:
+            positions.append((row, col))
+    return positions
 
-def data_to_be_curated(folder, file):
+def get_error_values(old_df, positions_info_lst):
+    error_val_info = []
+    for positions_info in positions_info_lst:
+        index = positions_info[0]
+        col_name = positions_info[1]
+        col_dat = old_df.loc[:, col_name]
+        col_value = col_dat.iloc[index]
+        file_number = old_df['file_number']
+        file_number_error_val = file_number.iloc[index]
+        output_lst = np.append(col_name, col_value)
+        final_output_lst = np.append(file_number_error_val, output_lst)
+        error_val_info.append(final_output_lst)
+        output_df = pd.DataFrame(error_val_info, columns=['file_number', 'variable_name', 'error_value'])
+    return output_df
+
+def data_to_be_curated_df(folder, file, value = 'data_to_be_curated'):
     path_db = os.path.join(folder, file)
     conn = sqlite3.connect(path_db)
     sql_stat = "SELECT * FROM sqlite_master WHERE TYPE = 'table'"
@@ -147,23 +130,24 @@ def data_to_be_curated(folder, file):
     tabs = tables['name']
     table_idx = [25, 26, 27, 28, 29, 30, 31]
 
-    writer = pd.ExcelWriter('D:/Shweta/pccm_db/2021_05_30_pccm_db_data_to_be_curated_sk.xlsx',
+    writer = pd.ExcelWriter('D:/Shweta/pccm_db/output_df/2021_06_08_pccm_db_data_to_be_curated_sk.xlsx',
                             engine='xlsxwriter')
-    tab_dat = pd.read_sql('SELECT * FROM curated_patient_information_history', conn)
-    tab_cols = tab_dat.columns
-    curation_dat_tab = []
-    for col in tab_cols:
-        col_dat = tab_dat[['file_number', col]]
-        curation_dat = col_dat[col_dat[col] == 'data_to_be_curated']
-        print(curation_dat)
-        if curation_dat.empty:
-            continue
-        # curation_dat_info = curation_dat[['file_number', col]]
-        curation_dat_tab.append(curation_dat)
-        print(curation_dat_tab)
-    # whole_info.append(curation_dat_tab)
-        whole_info_df = pd.DataFrame(curation_dat_tab)
-    # curation_dat_tab_df = pd.DataFrame(curation_dat_tab)
-        whole_info_df.to_excel(writer, sheet_name=tab[0:31], index=False)
-    writer.save()
 
+    df = pd.DataFrame(columns= ['file_number', 'variable_name', 'error_value', 'table_name'])
+    for tab in tabs[table_idx]:
+        curated_tab_dat = pd.read_sql('SELECT * FROM' + ' ' + tab, conn)
+        tab_name_str = tab[8:]
+        old_tab_dat = pd.read_sql('SELECT * FROM' + ' ' + tab_name_str, conn)
+        positions = get_index_of_error_values(curated_tab_dat, value)
+        error_df = get_error_values(old_tab_dat, positions)
+        error_df_shape = error_df.shape
+        table_name = pd.Series(np.repeat(tab, error_df_shape[0]))
+        final_error_df = pd.concat([error_df, table_name], axis=1)
+        final_error_df.columns = ['file_number', 'variable_name', 'error_value', 'table_name']
+        df = pd.concat([df, final_error_df])
+        df = df.sort_values('file_number')
+        error_df.to_excel(writer, sheet_name=tab[0:31], index= False)
+    writer.save()
+    return df
+
+data_to_be_curated_df(folder, file, value = 'data_to_be_curated')
